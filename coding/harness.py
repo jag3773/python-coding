@@ -94,9 +94,8 @@ def testCode(ns, func, tests):
   q.put((ns, func, tests))
   t = Thread(target=testThread())
   t.start()
-  t.join(5)
+  t.join(10)
   if t.isAlive():
-    return False
     t.join()
     return False
   return q.get()
