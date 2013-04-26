@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% block title %}Python Coding: Code{% endblock %}
+
+{% load bootstrap_toolkit %}
+
+{% block content %}
+{% if test %}
+
+<ul class="breadcrumb">
+  <li><a href="/">Home</a> <span class="divider">/</span></li>
+  <li><a href="/code/">Code</a> <span class="divider">/</span></li>
+  <li><a href="/code/{{ test.difficulty }}/">{{ test.difficulty }}</a> <span class="divider">/</span></li>
+  <li class="active">{{ test.name }}</li>
+</ul>
+
+  <h1>{{ test.name }} <small>Created by: {{ test.submitter }}</h1>
+  <p><strong>{{ test.prompt }}</strong></p>
+
+  <div class="container">
+  <div class="row">
+    <div class="span6">
+      <h2>Your Code</h2>
+      <form name="code-input" action="/code/{{ test.difficulty }}/{{ test.slug }}" method="post" class="form">{% csrf_token %}
+        <textarea class="span6" rows="10" name="code">{{ code }}</textarea>
+        <div class="pull-right">
+        <button type="submit" class="btn btn-primary">
+          <i class="icon-repeat icon-white"></i> Run
+        </button>
+        </div>
+      </form>
+    </div>
+
+    <div class="span6">
+      <h2>Tests</h2>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Test</th>
+            <th>Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for k, v in results.items %}
+          {% if v %}
+          <tr class="success">
+            <td>{{ k|cut:"("|cut:",)"|cut:")" }}</td>
+            <td align="center"><i class="icon-ok"></i></td>
+          {% else %}
+            <tr class="error">
+            <td>{{ k|cut:"("|cut:",)"|cut:")" }}</td>
+            <td align="center"><i class="icon-remove"></i></td>
+          {% endif %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  </div>
+
+{% else %}
+
+<ul class="breadcrumb">
+  <li><a href="/">Home</a> <span class="divider">/</span></li>
+  {% if difficulty %}
+    <li><a href="/code/">Code</a> <span class="divider">/</span></li>
+    <li class="active">{{ difficulty }}</li>
+  {% else %}
+    <li class="active">Code</li>
+  {% endif %}
+</ul>
+
+  <div class="container">
+  <div class="row">
+    <div class="span6">
+      {% regroup tests by difficulty as diff %}
+      {% for test in diff %}
+        <h2>{{ test.grouper }}</h2>
+        <ul>
+          {% for t in test.list %}
+          <li><a href="/code/{{ t.difficulty }}/{{ t.slug }}">{{ t.name }}</a></li>
+          {% endfor %}
+        </ul>
+      {% endfor %}
+    </div>
+    <div class="span6">
+    <p class="lead">Think you can come up with a better test?  <a href="/create/">Create one!</a></p>
+    </div>
+  </div>
+  </div>
+
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block title %}Python Coding: Create{% endblock %}
+
+{% load bootstrap_toolkit %}
+
+{% block content %}
+<div class="page header">
+  <h1>Create A New Test</h1>
+</div>
+<p class="lead">You must provide tests and a solution that passes those tests.</p>
+<p class="lead">Your test is subject to approval by the site administrators.</p>
+<div class="container">
+<div class="row">
+  <div class="span6">
+    <h2>Your New Test</h2>
+    <form name="new-test" action="/create/" method="post" class="form well">{% csrf_token %}
+      <label>Name of Test</label>
+      <input type="text" name="name" placeholder="Name of Test" value="{{ form.name }}"></input>
+      <label>Prompt</label>
+      <textarea class="span5" rows="5" name="prompt" placeholder="Prompt that describes the problem to the coder.">{{ form.prompt }}</textarea>
+      <label>Difficulty</label>
+      <select name="difficulty" value="{{ form.difficulty }}">
+        <option>{{ form.difficulty }}</option>
+        <option>Easy</option>
+        <option>Moderate</option>
+        <option>Difficult</option>
+        <option>Expert</option>
+      </select>
+      <label>Tests</label>
+      <textarea class="span5" rows="5" name="tests" placeholder="Tuples that provide input data and proper output, one per line.">{{ form.tests }}</textarea>
+      <label>Solution</label>
+      <textarea class="span5" rows="5" name="solution", placeholder="Your solution, which satisfies all of the tests above.">{{ form.solution }}</textarea>
+      <button type="submit" class="btn btn-primary">
+        <i class="icon-edit icon-white"></i> Submit
+      </button>
+    </form>
+  </div>
+  <div class="span6">
+    <h2>Example Test</h2>
+    <form  action="/create/" method="post" class="form well">{% csrf_token %}
+      <label>Name of Test</label>
+      <span class="text uneditable-input" name="name">Hello World!</span>
+      <label>Prompt</label>
+      <pre>
+Given two input strings, return their values added together, with proper spacing.
+      </pre>
+      <br/><label>Difficulty</label>
+      <span class="select uneditable-input">Easy</span>
+      <label>Tests</label>
+      <pre>
+('Hello', 'World!') == ('Hello World!',)
+(' Hello', 'everyone I know!') == ('Hello everyone I know!',)
+('Bye ', 'Joe') == ('Bye Joe',)
+('Goodbye', ' yo ') != ('Goodbye yo ',)
+      </pre>
+      <label>Solution</label>
+      <pre>
+def HelloWorld(str1, str2):
+  return str1.strip() + ' ' + str2.strip()
+      </pre>
+    </form>
+  </div>
+</div>
+</div>
+{% endblock %}
