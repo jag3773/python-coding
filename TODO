@@ -1,0 +1,4 @@
++ break users's code if it runs for longer than 5 seconds
+  + subclass thread so that I can add a method to stop execution
++ Test on google app engine
++ Create tests
